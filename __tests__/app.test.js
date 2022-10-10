@@ -38,7 +38,7 @@ describe("GET /api/categories", () => {
   });
 });
 describe.only("GET /api/reviews/:review_id", () => {
-  test.only("200: should return a list of categories ", () => {
+  test("200: should return a list of categories ", () => {
     return request(app)
       .get("/api/reviews/1")
       .expect(200)
@@ -57,4 +57,20 @@ describe.only("GET /api/reviews/:review_id", () => {
         });
       });
   });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .get("/api/reviews/99999999")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found");
+      });
+  });
+  // test("400: responds with a 'query is invalid'", () => {
+  //   return request(app)
+  //     .get("/api/reviews/blue")
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("query is invalid");
+  //     });
+  // });
 });
