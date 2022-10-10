@@ -14,7 +14,7 @@ beforeEach(() => seed({ categoryData, commentData, reviewData, userData }));
 afterAll(() => db.end());
 
 describe("GET /api/categories", () => {
-  test.only("200: should return a list of categories ", () => {
+  test("200: should return a list of categories ", () => {
     return request(app)
       .get("/api/categories")
       .expect(200)
@@ -28,12 +28,12 @@ describe("GET /api/categories", () => {
         });
       });
   });
-  // test("404: responds with a not found message ", () => {
-  //   return request(app)
-  //     .get("/api/nothinghere")
-  //     .expect(404)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("not found");
-  //     });
-  // });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .get("/api/catgorties")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found");
+      });
+  });
 });
