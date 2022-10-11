@@ -90,4 +90,12 @@ describe("GET /api/users", () => {
         });
       });
   });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .get("/api/uter")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found");
+      });
+  });
 });
