@@ -100,16 +100,24 @@ describe("GET /api/users", () => {
       });
   });
 });
-describe("PATCH /api/reviews/:review_id", () => {
+describe.only("PATCH /api/reviews/:review_id", () => {
   test("200: should return an object of an updated review ", () => {
     return request(app)
       .patch("/api/reviews/2")
-      .send()
+      .send({ inc_votes: 10 })
       .expect(200)
       .then(({ body }) => {
-        const { review } = body;
-        expect(review.votes).toMatchObject({
-          votes: 5,
+        const { updatedReview } = body;
+        expect(updatedReview).toMatchObject({
+          votes: 15,
+          review_id: expect.any(Number),
+          title: expect.any(String),
+          review_body: expect.any(String),
+          designer: expect.any(String),
+          review_img_url: expect.any(String),
+          category: expect.any(String),
+          owner: expect.any(String),
+          created_at: expect.any(String),
         });
       });
   });

@@ -18,4 +18,17 @@ function fetchReview(reviewId) {
     });
 }
 
-module.exports = { fetchReview };
+function patchReview(reviewId, incVotes) {
+  return db.query(
+    `
+    UPDATE reviews
+    SET votes = votes + $1
+    WHERE review_id = $2
+    RETURNING *`,
+    [incVotes, reviewId]
+  ).then(({rows}) => {
+    return rows;
+  })
+}
+
+module.exports = { fetchReview, patchReview };
