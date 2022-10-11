@@ -1,9 +1,10 @@
-const { getCategories } = require("./controllers/games.controllers");
+const { getCategories, getUsers } = require("./controllers/games.controllers");
 
 const express = require("express");
 const app = express();
 app.use(express.json());
 app.get("/api/categories", getCategories);
+app.get("/api/user", getUsers)
 
 app.all("/api/*", (req, res) => {
   res.status(404).send({ msg: "path not found" });

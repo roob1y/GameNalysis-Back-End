@@ -37,3 +37,20 @@ describe("GET /api/categories", () => {
       });
   });
 });
+describe.only("GET /api/users", () => {
+  test("200: should return an object of users", () => {
+    return request(app)
+      .get("/api/user")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+        })
+        });
+      });
+  });
+});

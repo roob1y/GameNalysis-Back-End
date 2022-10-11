@@ -1,4 +1,4 @@
-const { fetchCategories } = require("../models/games.models");
+const { fetchCategories, fetchUsers } = require("../models/games.models");
 
 function getCategories(req, res) {
   fetchCategories().then((data) => {
@@ -6,4 +6,10 @@ function getCategories(req, res) {
   });
 }
 
-module.exports = { getCategories };
+function getUsers(req, res) {
+  fetchUsers().then((users) => {
+    res.status(200).send({ users })
+  })
+}
+
+module.exports = { getCategories, getUsers };
