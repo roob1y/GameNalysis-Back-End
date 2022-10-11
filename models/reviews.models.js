@@ -1,11 +1,5 @@
 const db = require("../db/connection");
 
-function fetchCategories() {
-  return db.query(`SELECT * FROM categories`).then(({ rows }) => {
-    return rows;
-  });
-}
-
 function fetchReview(reviewId) {
   return db
     .query(
@@ -24,4 +18,4 @@ function fetchReview(reviewId) {
     });
 }
 
-module.exports = { fetchCategories, fetchReview };
+module.exports = { fetchReview };
