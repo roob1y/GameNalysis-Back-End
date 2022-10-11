@@ -20,6 +20,7 @@ describe("GET /api/categories", () => {
       .expect(200)
       .then(({ body }) => {
         const { categories } = body;
+        expect(categories).toHaveLength(4);
         categories.forEach((category) => {
           expect(category).toMatchObject({
             slug: expect.any(String),
@@ -86,7 +87,7 @@ describe("GET /api/users", () => {
             username: expect.any(String),
             name: expect.any(String),
             avatar_url: expect.any(String),
-        })
+          });
         });
       });
   });
