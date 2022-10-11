@@ -15,6 +15,8 @@ function patchReviewById(req, res, next) {
   patchReview(reviewId, incVotes).then((rows) => {
     res.status(200).send({updatedReview: rows[0]});
   })
+  .catch((err) => next(err));
+
 }
 
 module.exports = { getReview, patchReviewById };

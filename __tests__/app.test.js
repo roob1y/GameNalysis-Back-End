@@ -66,12 +66,12 @@ describe("GET /api/reviews/:review_id", () => {
         expect(res.body.msg).toBe("review id not found");
       });
   });
-  test("400: responds with a 'invalid data type in query'", () => {
+  test("400: responds with a 'invalid data type'", () => {
     return request(app)
       .get("/api/reviews/blue")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid data type in query");
+        expect(body.msg).toBe("invalid data type");
       });
   });
 });
@@ -119,6 +119,22 @@ describe.only("PATCH /api/reviews/:review_id", () => {
           owner: expect.any(String),
           created_at: expect.any(String),
         });
+      });
+  });
+  test("400: responds with a 'invalid data type'", () => {
+    return request(app)
+      .patch("/api/reviews/julie")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .patch("/api/reviews/999999999")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review id not found");
       });
   });
 });
