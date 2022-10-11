@@ -37,3 +37,40 @@ describe("GET /api/categories", () => {
       });
   });
 });
+describe("GET /api/reviews/:review_id", () => {
+  test("200: should return an object of a review ", () => {
+    return request(app)
+      .get("/api/reviews/1")
+      .expect(200)
+      .then(({ body }) => {
+        const { review } = body;
+        expect(review).toMatchObject({
+          review_id: expect.any(Number),
+          title: expect.any(String),
+          review_body: expect.any(String),
+          designer: expect.any(String),
+          review_img_url: expect.any(String),
+          votes: expect.any(Number),
+          category: expect.any(String),
+          owner: expect.any(String),
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .get("/api/reviews/99999999")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review id not found");
+      });
+  });
+  test("400: responds with a 'invalid data type in query'", () => {
+    return request(app)
+      .get("/api/reviews/blue")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type in query");
+      });
+  });
+});
