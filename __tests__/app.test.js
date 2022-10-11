@@ -66,12 +66,12 @@ describe("GET /api/reviews/:review_id", () => {
         expect(res.body.msg).toBe("review id not found");
       });
   });
-  test("400: responds with a 'invalid data type in query'", () => {
+  test("400: responds with a 'invalid data type'", () => {
     return request(app)
       .get("/api/reviews/blue")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid data type in query");
+        expect(body.msg).toBe("invalid data type");
       });
   });
 });
@@ -97,6 +97,44 @@ describe("GET /api/users", () => {
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("path not found");
+      });
+  });
+});
+describe.only("PATCH /api/reviews/:review_id", () => {
+  test("200: should return an object of an updated review ", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then(({ body }) => {
+        const { updatedReview } = body;
+        expect(updatedReview).toMatchObject({
+          votes: 15,
+          review_id: expect.any(Number),
+          title: expect.any(String),
+          review_body: expect.any(String),
+          designer: expect.any(String),
+          review_img_url: expect.any(String),
+          category: expect.any(String),
+          owner: expect.any(String),
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("400: responds with a 'invalid data type'", () => {
+    return request(app)
+      .patch("/api/reviews/julie")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .patch("/api/reviews/999999999")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review id not found");
       });
   });
 });
