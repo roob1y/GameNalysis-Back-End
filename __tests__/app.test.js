@@ -74,3 +74,16 @@ describe("GET /api/reviews/:review_id", () => {
       });
   });
 });
+describe("PATCH /api/reviews/:review_id", () => {
+  test("200: should return an object of an updated review ", () => {
+    return request(app)
+      .patch("/api/reviews/2").send()
+      .expect(200)
+      .then(({ body }) => {
+        const { review } = body;
+        expect(review.votes).toMatchObject({
+            votes: 5
+        });
+      });
+  });
+});
