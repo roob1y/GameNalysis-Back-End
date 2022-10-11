@@ -20,6 +20,7 @@ describe("GET /api/categories", () => {
       .expect(200)
       .then(({ body }) => {
         const { categories } = body;
+        expect(categories).toHaveLength(4);
         categories.forEach((category) => {
           expect(category).toMatchObject({
             slug: expect.any(String),
@@ -71,6 +72,31 @@ describe("GET /api/reviews/:review_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid data type in query");
+      });
+  });
+});
+describe("GET /api/users", () => {
+  test("200: should return an object of users", () => {
+    return request(app)
+      .get("/api/user")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .get("/api/uter")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found");
       });
   });
 });
