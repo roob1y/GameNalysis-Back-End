@@ -37,14 +37,14 @@ describe("GET /api/categories", () => {
       });
   });
 });
-describe.only("GET /api/reviews/:review_id", () => {
-  test("200: should return a list of categories ", () => {
+describe("GET /api/reviews/:review_id", () => {
+  test("200: should return an object of a review ", () => {
     return request(app)
       .get("/api/reviews/1")
       .expect(200)
       .then(({ body }) => {
         const { review } = body;
-        expect(review[0]).toMatchObject({
+        expect(review).toMatchObject({
           review_id: expect.any(Number),
           title: expect.any(String),
           review_body: expect.any(String),
@@ -62,15 +62,15 @@ describe.only("GET /api/reviews/:review_id", () => {
       .get("/api/reviews/99999999")
       .expect(404)
       .then((res) => {
-        expect(res.body.msg).toBe("path not found");
+        expect(res.body.msg).toBe("review id not found");
       });
   });
-  // test("400: responds with a 'query is invalid'", () => {
-  //   return request(app)
-  //     .get("/api/reviews/blue")
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("query is invalid");
-  //     });
-  // });
+  test("400: responds with a 'invalid data type in query'", () => {
+    return request(app)
+      .get("/api/reviews/blue")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type in query");
+      });
+  });
 });
