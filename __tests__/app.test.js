@@ -100,7 +100,7 @@ describe("GET /api/users", () => {
       });
   });
 });
-describe.only("PATCH /api/reviews/:review_id", () => {
+describe("PATCH /api/reviews/:review_id", () => {
   test("200: should return an object of an updated review ", () => {
     return request(app)
       .patch("/api/reviews/2")
@@ -135,6 +135,28 @@ describe.only("PATCH /api/reviews/:review_id", () => {
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("review id not found");
+      });
+  });
+});
+describe("GET /api/reviews/:review_id (comment count)", () => {
+  test("200: should return an object of a review with a new property of column_count", () => {
+    return request(app)
+      .get("/api/reviews/3")
+      .expect(200)
+      .then(({ body }) => {
+        const { review } = body;
+        expect(review).toMatchObject({
+          votes: expect.any(Number),
+          review_id: expect.any(Number),
+          title: expect.any(String),
+          review_body: expect.any(String),
+          designer: expect.any(String),
+          review_img_url: expect.any(String),
+          category: expect.any(String),
+          owner: expect.any(String),
+          created_at: expect.any(String),
+          comment_count: 3
+        });
       });
   });
 });
