@@ -176,7 +176,7 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
       });
   });
 });
-describe.only("GET /api/reviews", () => {
+describe("GET /api/reviews", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
       .get("/api/reviews")
@@ -227,6 +227,14 @@ describe.only("GET /api/reviews", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid order value");
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviets/")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
       });
   });
 });
