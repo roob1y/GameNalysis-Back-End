@@ -221,4 +221,12 @@ describe.only("GET /api/reviews", () => {
         });
       });
   });
+  test("400: should return message invalid order value", () => {
+    return request(app)
+      .get("/api/reviews?order=apples")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid order value");
+      });
+  });
 });

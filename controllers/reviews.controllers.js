@@ -23,11 +23,13 @@ function patchReviewById(req, res, next) {
     .catch((err) => next(err));
 }
 
-function getAllReviews(req, res) {
+function getAllReviews(req, res, next) {
   const { order } = req.query;
-  fetchAllReviews(order).then((data) => {
-    res.status(200).send({ reviews: data });
-  });
+  fetchAllReviews(order)
+    .then((data) => {
+      res.status(200).send({ reviews: data });
+    })
+    .catch((err) => next(err));
 }
 
 module.exports = { getReview, patchReviewById, getAllReviews };

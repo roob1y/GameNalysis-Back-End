@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const categories = require("../db/data/test-data/categories");
 
 function fetchReview(reviewId) {
   return db
@@ -42,7 +43,12 @@ function patchReview(reviewId, incVotes) {
 
 // SELECT owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count FROM reviews
 
-function fetchAllReviews(order = 'created_at', sortBy = 'DESC') {
+function fetchAllReviews(order = "created_at", sortBy = "DESC") {
+  const validOrderValues = ["created_at", "category"];
+
+  if (!validOrderValues.includes(order)) {
+    return Promise.reject({ status: 400, msg: "invalid order value" });
+  }
   return db
     .query(
       `
@@ -50,7 +56,7 @@ function fetchAllReviews(order = 'created_at', sortBy = 'DESC') {
       LEFT JOIN comments ON comments.review_id = reviews.review_id
       GROUP BY reviews.review_id
       ORDER BY ${order} ${sortBy};
-    `,
+    `
     )
     .then(({ rows }) => {
       return rows;
