@@ -42,15 +42,15 @@ function patchReview(reviewId, incVotes) {
 
 // SELECT owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count FROM reviews
 
-function fetchAllReviews() {
+function fetchAllReviews(order = 'created_at', sortBy = 'DESC') {
   return db
     .query(
       `
       SELECT reviews.review_id, owner, title, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
       LEFT JOIN comments ON comments.review_id = reviews.review_id
       GROUP BY reviews.review_id
-      ORDER BY created_at DESC;
-    `
+      ORDER BY ${order} ${sortBy};
+    `,
     )
     .then(({ rows }) => {
       return rows;

@@ -24,7 +24,8 @@ function patchReviewById(req, res, next) {
 }
 
 function getAllReviews(req, res) {
-  fetchAllReviews().then((data) => {
+  const { order } = req.query;
+  fetchAllReviews(order).then((data) => {
     res.status(200).send({ reviews: data });
   });
 }

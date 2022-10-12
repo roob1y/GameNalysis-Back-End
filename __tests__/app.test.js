@@ -210,4 +210,15 @@ describe.only("GET /api/reviews", () => {
         });
       });
   });
+  test("200: should be able to filter reviews by category", () => {
+    return request(app)
+      .get("/api/reviews?order=category")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("category", {
+          descending: true,
+        });
+      });
+  });
 });
