@@ -202,8 +202,24 @@ describe("GET /api/reviews/:review_id/comments", () => {
       .get("/api/reviews/3/comments")
       .expect(200)
       .then(({ body }) => {
-        const { comments } = body;        
-        expect( comments ).toBeSortedBy("created_at", { descending: true });
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviews/99999999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("review id not found");
+      });
+  });
+  test("400: responds with bad path msg", () => {
+    return request(app)
+      .get("/api/reviews/blue/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
       });
   });
 });

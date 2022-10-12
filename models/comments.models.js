@@ -11,8 +11,12 @@ function fetchCommentsByReviewId(reviewId) {
       [reviewId]
     )
     .then(({ rows }) => {
-      return rows;
-    });
+      if (rows.length === 0) {
+        return Promise.reject({status: 404, msg: 'review id not found'})
+      } else {
+        return rows;
+      }
+    })
 }
 
 module.exports = { fetchCommentsByReviewId };
