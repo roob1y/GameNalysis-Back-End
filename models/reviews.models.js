@@ -39,4 +39,8 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-module.exports = { fetchReview, patchReview };
+function fetchAllReviews() {
+
+}
+
+module.exports = { fetchReview, patchReview, fetchAllReviews };
