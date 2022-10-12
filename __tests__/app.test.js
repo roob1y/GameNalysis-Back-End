@@ -138,7 +138,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       });
   });
 });
-describe.only("GET /api/reviews/:review_id (comment count)", () => {
+describe("GET /api/reviews/:review_id (comment count)", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
       .get("/api/reviews/3")
@@ -164,7 +164,7 @@ describe.only("GET /api/reviews/:review_id (comment count)", () => {
       .get("/api/reviews/99999999")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("review id not found")
+        expect(body.msg).toBe("review id not found");
       });
   });
   test("400: responds with a 'invalid data type'", () => {
@@ -173,6 +173,37 @@ describe.only("GET /api/reviews/:review_id (comment count)", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
+console.log(expect)
+describe.only("GET /api/reviews/:review_id/comments", () => {
+  test.only("200: should return an array of comments for given review id where eachcomment should have certain properties", () => {
+    return request(app)
+    .get("/api/reviews/3/comments")
+    .expect(200)
+    .then((comments) => {
+      expect(comments).toBeArray()
+      expect(comments).toHaveLength(6);
+      comments.forEach((comment) => {
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          review_id: expect.any(String),
+        });
+      });
+    });
+  });
+  test("200: should have comments ordered by most recent comment", () => {
+    return request(app)
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at", { descending: true });
       });
   });
 });
