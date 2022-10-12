@@ -176,34 +176,34 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
       });
   });
 });
-console.log(expect)
-describe.only("GET /api/reviews/:review_id/comments", () => {
-  test.only("200: should return an array of comments for given review id where eachcomment should have certain properties", () => {
+describe("GET /api/reviews/:review_id/comments", () => {
+  test("200: should return an array of comments for given review id where each comment should have certain properties", () => {
     return request(app)
-    .get("/api/reviews/3/comments")
-    .expect(200)
-    .then((comments) => {
-      expect(comments).toBeArray()
-      expect(comments).toHaveLength(6);
-      comments.forEach((comment) => {
-        expect(comment).toMatchObject({
-          comment_id: expect.any(Number),
-          votes: expect.any(Number),
-          created_at: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
-          review_id: expect.any(String),
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeArray();
+        expect(comments).toHaveLength(3);
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            review_id: 3,
+          });
         });
       });
-    });
   });
   test("200: should have comments ordered by most recent comment", () => {
     return request(app)
       .get("/api/reviews/3/comments")
       .expect(200)
       .then(({ body }) => {
-        const { comments } = body;
-        expect(comments).toBeSortedBy("created_at", { descending: true });
+        const { comments } = body;        
+        expect( comments ).toBeSortedBy("created_at", { descending: true });
       });
   });
 });
