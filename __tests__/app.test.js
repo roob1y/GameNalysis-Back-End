@@ -206,7 +206,9 @@ describe.only("GET /api/reviews", () => {
       .then(({ body }) => {
         const { reviews } = body;
         reviews.forEach((review) => {
-          expect(review).toBeSortedBy("created_at");
+          expect(review).toBeSortedBy("created_at", {
+            descending: true,
+          });
         });
       });
   });
