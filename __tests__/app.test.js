@@ -199,4 +199,15 @@ describe.only("GET /api/reviews", () => {
         });
       });
   });
+  test("200: should be sorted by date", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        reviews.forEach((review) => {
+          expect(review).toBeSortedBy("created_at");
+        });
+      });
+  });
 });
