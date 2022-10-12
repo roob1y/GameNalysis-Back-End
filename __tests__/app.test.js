@@ -133,12 +133,12 @@ describe("PATCH /api/reviews/:review_id", () => {
     return request(app)
       .patch("/api/reviews/999999999")
       .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("review id not found");
+      .then(({ body }) => {
+        expect(body.msg).toBe("review id not found");
       });
   });
 });
-describe("GET /api/reviews/:review_id (comment count)", () => {
+describe.only("GET /api/reviews/:review_id (comment count)", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
       .get("/api/reviews/3")
@@ -155,8 +155,24 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
           category: expect.any(String),
           owner: expect.any(String),
           created_at: expect.any(String),
-          comment_count: 3
+          comment_count: 3,
         });
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviews/99999999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("review id not found")
+      });
+  });
+  test("400: responds with a 'invalid data type'", () => {
+    return request(app)
+      .patch("/api/reviews/julie")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
       });
   });
 });
