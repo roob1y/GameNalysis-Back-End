@@ -205,9 +205,9 @@ describe.only("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-          expect(reviews).toBeSortedBy("created_at", {
-            descending: true,
-          });
+        expect(reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
 });
