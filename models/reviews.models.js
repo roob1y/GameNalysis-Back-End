@@ -24,10 +24,11 @@ function patchReview(reviewId, incVotes) {
   return db
     .query(
       `
-    UPDATE reviews
-    SET votes = votes + $1
-    WHERE review_id = $2
-    RETURNING *`,
+        UPDATE reviews
+        SET votes = votes + $1
+        WHERE review_id = $2
+        RETURNING *
+      `,
       [incVotes, reviewId]
     )
     .then(({ rows }) => {
@@ -39,8 +40,20 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-function fetchAllReviews() {
+// SELECT owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count FROM reviews
 
+function fetchAllReviews() {
+  return db
+    .query(
+      `
+      SELECT reviews.review_id, owner, title, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
+      LEFT JOIN comments ON comments.review_id = reviews.review_id
+      GROUP BY reviews.review_id;
+    `
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
 }
 
 module.exports = { fetchReview, patchReview, fetchAllReviews };
