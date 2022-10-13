@@ -40,8 +40,8 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-function fetchAllReviews(sortBy = "created_at", order = "DESC") {
-  const validOrderValues = [
+function fetchAllReviews(sortBy = "created_at", order = "desc") {
+  const validSortByValues = [
     "created_at",
     "category",
     "title",
@@ -51,8 +51,16 @@ function fetchAllReviews(sortBy = "created_at", order = "DESC") {
     "review_body",
     "votes",
   ];
+  const validOrderValues = [
+    "asc",
+    "desc"
+  ];
+  
 
-  if (!validOrderValues.includes(sortBy)) {
+  if (!validSortByValues.includes(sortBy)) {
+    return Promise.reject({ status: 400, msg: "invalid sort by value" });
+  }
+  if (!validOrderValues.includes(order)) {
     return Promise.reject({ status: 400, msg: "invalid order value" });
   }
   return db
@@ -65,7 +73,11 @@ function fetchAllReviews(sortBy = "created_at", order = "DESC") {
     `
     )
     .then(({ rows }) => {
-      return rows;
+      if (rows.length === 0) {
+        Promise.reject({ status: 400, msg: "invalid sort by value" });
+      } else {
+        return rows;
+      }
     });
 }
 

@@ -226,7 +226,7 @@ describe("GET /api/reviews", () => {
       .get("/api/reviews?sort_by=apples")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid order value");
+        expect(body.msg).toBe("invalid sort by value");
       });
   });
   test("404: responds with not found msg", () => {
@@ -335,7 +335,6 @@ describe("GET /api/reviews for queries", () => {
       .get("/api/reviews?sort_by=review_body")
       .expect(200)
       .then(({ body }) => {
-        console.log('body: ', body);
         const { reviews } = body;
         expect(reviews).toBeSortedBy("review_body", {
           descending: true,
@@ -351,6 +350,31 @@ describe("GET /api/reviews for queries", () => {
         expect(reviews).toBeSortedBy("votes", {
           descending: true,
         });
+      });
+  });
+  test("200: should be sorted by sort_by query by votes which ascends", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("votes");
+      });
+  });
+  test("400: should return error message of 'invalid sort by value", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=oranges")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('invalid sort by value');
+      });
+  });
+  test("400: should return error message of 'invalid order value", () => {
+    return request(app)
+      .get("/api/reviews?order=oranges")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('invalid order value');
       });
   });
 });
