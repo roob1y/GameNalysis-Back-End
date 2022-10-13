@@ -14,7 +14,7 @@ app.get("/api/user", getUsers);
 
 app.patch("/api/reviews/:review_id", patchReviewById)
 
-app.post("/api/reviews/3/comments", postCommentByReviewId)
+app.post("/api/reviews/:review_id/comments", postCommentByReviewId)
 
 
 app.all("/api/*", (req, res) => {
