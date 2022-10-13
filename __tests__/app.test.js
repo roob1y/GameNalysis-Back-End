@@ -285,3 +285,58 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 });
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("201: should return an object of the posted comment", () => {
+    const postComment = {
+      username: "bainesface",
+      body: "OMG I LOVED THIS AS A CHILD",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .expect(201)
+      .send(postComment)
+      .then(({ body }) => {
+        const { postedComment } = body;
+        expect(postedComment.body).toEqual("OMG I LOVED THIS AS A CHILD");
+      });
+  });
+  test("404: invalid review id", () => {
+    const postComment = {
+      username: "bainesface",
+      body: "OMG I LOVED THIS AS A CHILD",
+    };
+    return request(app)
+      .post("/api/reviews/9999999/comments")
+      .send(postComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('invalid review id')
+      });
+  });
+  test("404: invalid path", () => {
+    const postComment = {
+      username: "bainesface",
+      body: "OMG I LOVED THIS AS A CHILD",
+    };
+    return request(app)
+      .post("/api/reviews/3/commates")
+      .send(postComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('path not found')
+      });
+  });
+  test("400: invalid data type", () => {
+    const postComment = {
+      username: "bainesface",
+      body: "OMG I LOVED THIS AS A CHILD",
+    };
+    return request(app)
+      .post("/api/reviews/angela/comments")
+      .expect(400)
+      .send(postComment)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+});

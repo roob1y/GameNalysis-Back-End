@@ -1,11 +1,7 @@
 const { getCategories } = require("./controllers/categories.controllers");
-const {
-  getReview,
-  patchReviewById,
-  getAllReviews,
-} = require("./controllers/reviews.controllers");
+const { getAllReviews, getReview, patchReviewById } = require("./controllers/reviews.controllers");
 const { getUsers } = require("./controllers/users.controllers");
-const { getCommentsByReviewId } = require("./controllers/comments.controllers");
+const { getCommentsByReviewId, postCommentByReviewId } = require("./controllers/comments.controllers");
 
 
 const express = require("express");
@@ -21,6 +17,9 @@ app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
 
 app.patch("/api/reviews/:review_id", patchReviewById);
 
+app.post("/api/reviews/:review_id/comments", postCommentByReviewId)
+
+
 app.all("/api/*", (req, res) => {
   res.status(404).send({ msg: "path not found" });
 });
@@ -28,9 +27,11 @@ app.all("/api/*", (req, res) => {
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "invalid data type" });
-  } else {
+  } else if (err.code === "23503") {
+      res.status(404).send({ msg: "invalid review id" });
+    } else {
     next(err);
-  }
+    }
 });
 
 app.use((err, req, res, next) => {

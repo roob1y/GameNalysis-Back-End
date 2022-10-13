@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const categories = require("../db/data/test-data/categories");
 
 function fetchReview(reviewId) {
   return db
@@ -40,8 +39,6 @@ function patchReview(reviewId, incVotes) {
       }
     });
 }
-
-// SELECT owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count FROM reviews
 
 function fetchAllReviews(order = "created_at", sortBy = "DESC") {
   const validOrderValues = ["created_at", "category"];
