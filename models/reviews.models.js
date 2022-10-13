@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const categories = require("../db/data/test-data/categories");
 
 function fetchReview(reviewId) {
   return db
@@ -24,10 +25,11 @@ function patchReview(reviewId, incVotes) {
   return db
     .query(
       `
-    UPDATE reviews
-    SET votes = votes + $1
-    WHERE review_id = $2
-    RETURNING *`,
+        UPDATE reviews
+        SET votes = votes + $1
+        WHERE review_id = $2
+        RETURNING *
+      `,
       [incVotes, reviewId]
     )
     .then(({ rows }) => {
@@ -39,4 +41,26 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-module.exports = { fetchReview, patchReview };
+// SELECT owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count FROM reviews
+
+function fetchAllReviews(order = "created_at", sortBy = "DESC") {
+  const validOrderValues = ["created_at", "category"];
+
+  if (!validOrderValues.includes(order)) {
+    return Promise.reject({ status: 400, msg: "invalid order value" });
+  }
+  return db
+    .query(
+      `
+      SELECT reviews.review_id, owner, title, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
+      LEFT JOIN comments ON comments.review_id = reviews.review_id
+      GROUP BY reviews.review_id
+      ORDER BY ${order} ${sortBy};
+    `
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+}
+
+module.exports = { fetchReview, patchReview, fetchAllReviews };

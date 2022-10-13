@@ -1,5 +1,9 @@
 const { getCategories } = require("./controllers/categories.controllers");
-const { getReview, patchReviewById } = require("./controllers/reviews.controllers");
+const {
+  getReview,
+  patchReviewById,
+  getAllReviews,
+} = require("./controllers/reviews.controllers");
 const { getUsers } = require("./controllers/users.controllers");
 const { getCommentsByReviewId } = require("./controllers/comments.controllers");
 
@@ -11,10 +15,11 @@ app.use(express.json());
 app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReview);
 app.get("/api/user", getUsers);
+app.get("/api/reviews/", getAllReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
 
 
-app.patch("/api/reviews/:review_id", patchReviewById)
+app.patch("/api/reviews/:review_id", patchReviewById);
 
 app.all("/api/*", (req, res) => {
   res.status(404).send({ msg: "path not found" });
@@ -29,7 +34,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err.status) {
+  if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg });
   } else {
     next(err);
