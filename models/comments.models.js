@@ -20,7 +20,6 @@ function fetchCommentsByReviewId(reviewId) {
 }
 
 function addCommentsByReviewId(reviewId, postComment) {
-  console.log(postComment)
   const { username, body } = postComment;
   return db
     .query(

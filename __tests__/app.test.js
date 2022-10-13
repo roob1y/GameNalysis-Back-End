@@ -244,7 +244,6 @@ describe("GET /api/reviews/:review_id/comments", () => {
       .get("/api/reviews/3/comments")
       .expect(200)
       .then(({ body }) => {
-        console.log(body)
         const { comments } = body;
         expect(comments).toBeArray();
         expect(comments).toHaveLength(3);
@@ -301,17 +300,17 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(postedComment.body).toEqual("OMG I LOVED THIS AS A CHILD");
       });
   });
-  test("404: invalid review id", () => {
-    const postComment = {
-      username: "bainesface",
-      body: "OMG I LOVED THIS AS A CHILD",
-    };
-    return request(app)
-      .post("/api/reviews/9999999/comments")
-      .expect(404)
-      .send(postComment)
+  // test("404: invalid review id", () => {
+  //   const postComment = {
+  //     username: "bainesface",
+  //     body: "OMG I LOVED THIS AS A CHILD",
+  //   };
+  //   return request(app)
+  //     .post("/api/reviews/9999999/comments")
+  //     .expect(404)
+  //     .send(postComment)
 
-  })
+  // })
   // test("400: invalid data type", () => {
   //   const postComment = {
   //     username: "bainesface",

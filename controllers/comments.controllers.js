@@ -1,4 +1,4 @@
-const { fetchCommentsByReviewId } = require("../models/comments.models");
+const { fetchCommentsByReviewId, addCommentsByReviewId } = require("../models/comments.models");
 
 
 function postCommentByReviewId(req, res) {
