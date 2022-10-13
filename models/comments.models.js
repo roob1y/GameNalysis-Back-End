@@ -2,16 +2,17 @@ const db = require("../db/connection");
 
 function fetchCommentByReviewId(reviewId, postComment) {
   const { username, body } = postComment;
-  db.query(
-    `
+  return db
+    .query(
+      `
         INSERT INTO comments (body, author, review_id)
         VALUES ($1, $2, $3)        
-        RETURNING *
+        RETURNING *;
     `,
-    [username, body, reviewId]
-  ).then(({ rows }) => {
-    console.log(rows);
-  });
+      [body, username, reviewId]
+    )
+    .then(({ rows }) => rows[0]);
+    
 }
 
 module.exports = { fetchCommentByReviewId };
