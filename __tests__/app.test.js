@@ -286,13 +286,69 @@ describe("GET /api/reviews/:review_id/comments", () => {
   });
 });
 describe("GET /api/reviews for queries", () => {  
-  test("200: should be sorted by sort_by query by specific column", () => {
+  test("200: should be sorted by sort_by query by title", () => {
     return request(app)
       .get("/api/reviews?sort_by=title")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
         expect(reviews).toBeSortedBy("title", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by designer", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=designer")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("designer", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by owner", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=owner")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("owner", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by review_img_url", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=review_img_url")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("review_img_url", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by review_body", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=review_body")
+      .expect(200)
+      .then(({ body }) => {
+        console.log('body: ', body);
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("review_body", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by votes", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("votes", {
           descending: true,
         });
       });
