@@ -138,7 +138,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       });
   });
 });
-describe.only("GET /api/reviews/:review_id (comment count)", () => {
+describe("GET /api/reviews/:review_id (comment count)", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
       .get("/api/reviews/3")
@@ -164,7 +164,7 @@ describe.only("GET /api/reviews/:review_id (comment count)", () => {
       .get("/api/reviews/99999999")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("review id not found")
+        expect(body.msg).toBe("review id not found");
       });
   });
   test("400: responds with a 'invalid data type'", () => {
@@ -173,6 +173,22 @@ describe.only("GET /api/reviews/:review_id (comment count)", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("201: should return an object of the posted object", () => {
+    const postComment = {
+      username: 'cassandri228',
+      body: "OMG I LOVED THIS AS A CHILD",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .expect(201)
+      .send(postComment)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual(postComment);
       });
   });
 });
