@@ -1,7 +1,7 @@
 const { getCategories } = require("./controllers/categories.controllers");
-const { getReviews, getReview, patchReviewById } = require("./controllers/reviews.controllers");
+const { getAllReviews, getReview, patchReviewById } = require("./controllers/reviews.controllers");
 const { getUsers } = require("./controllers/users.controllers");
-const { postCommentByReviewId } = require("./controllers/comments.controllers");
+const { getCommentsByReviewId, postCommentByReviewId } = require("./controllers/comments.controllers");
 
 
 const express = require("express");
@@ -9,11 +9,13 @@ const app = express();
 app.use(express.json());
 
 app.get("/api/categories", getCategories);
-app.get("/api/reviews", getReviews)
 app.get("/api/reviews/:review_id", getReview);
 app.get("/api/user", getUsers);
+app.get("/api/reviews/", getAllReviews);
+app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
 
-app.patch("/api/reviews/:review_id", patchReviewById)
+
+app.patch("/api/reviews/:review_id", patchReviewById);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewId)
 
@@ -31,7 +33,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err.status) {
+  if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg });
   } else {
     next(err);

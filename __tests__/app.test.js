@@ -176,6 +176,116 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
       });
   });
 });
+describe("GET /api/reviews", () => {
+  test("200: should return an object of a review with a new property of column_count", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toHaveLength(13);
+        reviews.forEach((review) => {
+          expect(review).toMatchObject({
+            owner: expect.any(String),
+            title: expect.any(String),
+            review_id: expect.any(Number),
+            category: expect.any(String),
+            review_img_url: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            designer: expect.any(String),
+            comment_count: expect.any(Number),
+          });
+        });
+      });
+  });
+  test("200: should be sorted by date", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be able to filter reviews by category", () => {
+    return request(app)
+      .get("/api/reviews?order=category")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("category", {
+          descending: true,
+        });
+      });
+  });
+  test("400: should return message invalid order value", () => {
+    return request(app)
+      .get("/api/reviews?order=apples")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid order value");
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviets/")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
+      });
+  });
+});
+describe("GET /api/reviews/:review_id/comments", () => {
+  test("200: should return an array of comments for given review id where each comment should have certain properties", () => {
+    return request(app)
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body)
+        const { comments } = body;
+        expect(comments).toBeArray();
+        expect(comments).toHaveLength(3);
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            review_id: 3,
+          });
+        });
+      });
+  });
+  test("200: should have comments ordered by most recent comment", () => {
+    return request(app)
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviews/99999999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("review id not found");
+      });
+  });
+  test("400: responds with bad path msg", () => {
+    return request(app)
+      .get("/api/reviews/blue/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
 describe("POST /api/reviews/:review_id/comments", () => {
   test("201: should return an object of the posted comment", () => {
     const postComment = {
@@ -200,10 +310,8 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .post("/api/reviews/9999999/comments")
       .expect(404)
       .send(postComment)
-      .then(({ body }) => {
-        expect(body.msg).toBe("review id not found");
-      });
-  });
+
+  })
   // test("400: invalid data type", () => {
   //   const postComment = {
   //     username: "bainesface",
@@ -217,4 +325,4 @@ describe("POST /api/reviews/:review_id/comments", () => {
   //       expect(body.msg).toBe("invalid data type");
   //     });
   // });
-});
+})

@@ -1,6 +1,26 @@
 const db = require("../db/connection");
 
-function fetchCommentByReviewId(reviewId, postComment) {
+function fetchCommentsByReviewId(reviewId) {
+  return db
+    .query(
+      `
+    SELECT * FROM comments
+    WHERE review_id = $1
+    ORDER BY created_at DESC;
+    `,
+      [reviewId]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({status: 404, msg: 'review id not found'})
+      } else {
+        return rows;
+      }
+    })
+}
+
+function addCommentsByReviewId(reviewId, postComment) {
+  console.log(postComment)
   const { username, body } = postComment;
   return db
     .query(
@@ -20,4 +40,4 @@ function fetchCommentByReviewId(reviewId, postComment) {
     });
 }
 
-module.exports = { fetchCommentByReviewId };
+module.exports = { fetchCommentsByReviewId, addCommentsByReviewId };

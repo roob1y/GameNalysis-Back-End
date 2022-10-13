@@ -1,4 +1,8 @@
-const { fetchReview, patchReview } = require("../models/reviews.models");
+const {
+  fetchReview,
+  patchReview,
+  fetchAllReviews,
+} = require("../models/reviews.models");
 
 function getReview(req, res, next) {
   const reviewId = req.params.review_id;
@@ -18,7 +22,13 @@ function patchReviewById(req, res, next) {
   .catch((err) => next(err));
 }
 
-function getReviews(req, res) {
-  
+function getAllReviews(req, res, next) {
+  const { order } = req.query;
+  fetchAllReviews(order)
+    .then((data) => {
+      res.status(200).send({ reviews: data });
+    })
+    .catch((err) => next(err));
 }
-module.exports = { getReview, patchReviewById, getReviews };
+
+module.exports = { getReview, patchReviewById, getAllReviews };
