@@ -177,7 +177,7 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
   });
 });
 describe("POST /api/reviews/:review_id/comments", () => {
-  test("201: should return an object of the posted object", () => {
+  test("201: should return an object of the posted comment", () => {
     const postComment = {
       username: 'cassandri228',
       body: "OMG I LOVED THIS AS A CHILD",
@@ -188,7 +188,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .then(({ body }) => {
         const { comment } = body;
-        expect(comment).toEqual(postComment);
+        expect(comment).toEqual(postComment.body);
       });
   });
 });
