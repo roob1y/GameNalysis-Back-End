@@ -138,7 +138,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       });
   });
 });
-describe.only("GET /api/reviews/:review_id (comment count)", () => {
+describe("GET /api/reviews/:review_id (comment count)", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
       .get("/api/reviews/3")
@@ -164,7 +164,7 @@ describe.only("GET /api/reviews/:review_id (comment count)", () => {
       .get("/api/reviews/99999999")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("review id not found")
+        expect(body.msg).toBe("review id not found");
       });
   });
   test("400: responds with a 'invalid data type'", () => {
@@ -173,6 +173,68 @@ describe.only("GET /api/reviews/:review_id (comment count)", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
+describe("GET /api/reviews", () => {
+  test("200: should return an object of a review with a new property of column_count", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toHaveLength(13);
+        reviews.forEach((review) => {
+          expect(review).toMatchObject({
+            owner: expect.any(String),
+            title: expect.any(String),
+            review_id: expect.any(Number),
+            category: expect.any(String),
+            review_img_url: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            designer: expect.any(String),
+            comment_count: expect.any(Number),
+          });
+        });
+      });
+  });
+  test("200: should be sorted by date", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be able to filter reviews by category", () => {
+    return request(app)
+      .get("/api/reviews?order=category")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("category", {
+          descending: true,
+        });
+      });
+  });
+  test("400: should return message invalid order value", () => {
+    return request(app)
+      .get("/api/reviews?order=apples")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid order value");
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviets/")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
       });
   });
 });
