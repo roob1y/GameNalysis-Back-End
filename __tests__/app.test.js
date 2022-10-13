@@ -212,7 +212,7 @@ describe("GET /api/reviews", () => {
   });
   test("200: should be able to filter reviews by category", () => {
     return request(app)
-      .get("/api/reviews?order=category")
+      .get("/api/reviews?sort_by=category")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
@@ -223,7 +223,7 @@ describe("GET /api/reviews", () => {
   });
   test("400: should return message invalid order value", () => {
     return request(app)
-      .get("/api/reviews?order=apples")
+      .get("/api/reviews?sort_by=apples")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid order value");
