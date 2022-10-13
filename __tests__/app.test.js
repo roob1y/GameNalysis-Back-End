@@ -285,3 +285,16 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 });
+describe("GET /api/reviews for queries", () => {  
+  test("200: should be sorted by sort_by query by specific column", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("title", {
+          descending: true,
+        });
+      });
+  });
+});
