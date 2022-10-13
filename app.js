@@ -5,6 +5,8 @@ const {
   getAllReviews,
 } = require("./controllers/reviews.controllers");
 const { getUsers } = require("./controllers/users.controllers");
+const { getCommentsByReviewId } = require("./controllers/comments.controllers");
+
 
 const express = require("express");
 const app = express();
@@ -14,6 +16,8 @@ app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReview);
 app.get("/api/user", getUsers);
 app.get("/api/reviews/", getAllReviews);
+app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
+
 
 app.patch("/api/reviews/:review_id", patchReviewById);
 

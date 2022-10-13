@@ -238,3 +238,50 @@ describe("GET /api/reviews", () => {
       });
   });
 });
+describe("GET /api/reviews/:review_id/comments", () => {
+  test("200: should return an array of comments for given review id where each comment should have certain properties", () => {
+    return request(app)
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeArray();
+        expect(comments).toHaveLength(3);
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            review_id: 3,
+          });
+        });
+      });
+  });
+  test("200: should have comments ordered by most recent comment", () => {
+    return request(app)
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("404: responds with not found msg", () => {
+    return request(app)
+      .get("/api/reviews/99999999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("review id not found");
+      });
+  });
+  test("400: responds with bad path msg", () => {
+    return request(app)
+      .get("/api/reviews/blue/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
