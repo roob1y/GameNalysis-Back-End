@@ -19,4 +19,24 @@ function fetchCommentsByReviewId(reviewId) {
     })
 }
 
-module.exports = { fetchCommentsByReviewId };
+function addCommentsByReviewId(reviewId, postComment) {
+  const { username, body } = postComment;
+  return db
+    .query(
+      `
+        INSERT INTO comments (body, author, review_id)
+        VALUES ($1, $2, $3)        
+        RETURNING *;
+    `,
+      [body, username, reviewId]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        Promise.reject({ status: 404, msg: "review id not found" });
+      } else {
+        return rows[0];
+      }
+    });
+}
+
+module.exports = { fetchCommentsByReviewId, addCommentsByReviewId };
