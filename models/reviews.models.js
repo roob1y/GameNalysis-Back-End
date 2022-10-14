@@ -40,23 +40,44 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-function fetchAllReviews(order = "created_at", sortBy = "DESC") {
-  const validOrderValues = ["created_at", "category"];
+function fetchAllReviews(sortBy = "created_at", order = "desc") {
+  const validSortByValues = [
+    "created_at",
+    "category",
+    "title",
+    "designer",
+    "owner",
+    "review_img_url",
+    "review_body",
+    "votes",
+  ];
+  const validOrderValues = [
+    "asc",
+    "desc"
+  ];
+  
 
+  if (!validSortByValues.includes(sortBy)) {
+    return Promise.reject({ status: 400, msg: "invalid sort by value" });
+  }
   if (!validOrderValues.includes(order)) {
     return Promise.reject({ status: 400, msg: "invalid order value" });
   }
   return db
     .query(
       `
-      SELECT reviews.review_id, owner, title, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
+      SELECT reviews.*, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
       LEFT JOIN comments ON comments.review_id = reviews.review_id
       GROUP BY reviews.review_id
-      ORDER BY ${order} ${sortBy};
+      ORDER BY ${sortBy} ${order};
     `
     )
     .then(({ rows }) => {
-      return rows;
+      if (rows.length === 0) {
+        Promise.reject({ status: 400, msg: "invalid sort by value" });
+      } else {
+        return rows;
+      }
     });
 }
 

@@ -38,6 +38,7 @@ describe("GET /api/categories", () => {
       });
   });
 });
+
 describe("GET /api/reviews/:review_id", () => {
   test("200: should return an object of a review ", () => {
     return request(app)
@@ -75,6 +76,7 @@ describe("GET /api/reviews/:review_id", () => {
       });
   });
 });
+
 describe("GET /api/users", () => {
   test("200: should return an object of users", () => {
     return request(app)
@@ -100,6 +102,7 @@ describe("GET /api/users", () => {
       });
   });
 });
+
 describe("PATCH /api/reviews/:review_id", () => {
   test("200: should return an object of an updated review ", () => {
     return request(app)
@@ -138,6 +141,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       });
   });
 });
+
 describe("GET /api/reviews/:review_id (comment count)", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
@@ -176,6 +180,7 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
       });
   });
 });
+
 describe("GET /api/reviews", () => {
   test("200: should return an object of a review with a new property of column_count", () => {
     return request(app)
@@ -212,7 +217,7 @@ describe("GET /api/reviews", () => {
   });
   test("200: should be able to filter reviews by category", () => {
     return request(app)
-      .get("/api/reviews?order=category")
+      .get("/api/reviews?sort_by=category")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
@@ -223,10 +228,10 @@ describe("GET /api/reviews", () => {
   });
   test("400: should return message invalid order value", () => {
     return request(app)
-      .get("/api/reviews?order=apples")
+      .get("/api/reviews?sort_by=apples")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid order value");
+        expect(body.msg).toBe("invalid sort by value");
       });
   });
   test("404: responds with not found msg", () => {
@@ -238,6 +243,7 @@ describe("GET /api/reviews", () => {
       });
   });
 });
+
 describe("GET /api/reviews/:review_id/comments", () => {
   test("200: should return an array of comments for given review id where each comment should have certain properties", () => {
     return request(app)
@@ -285,6 +291,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 });
+
 describe("POST /api/reviews/:review_id/comments", () => {
   test("201: should return an object of the posted comment", () => {
     const postComment = {
@@ -310,7 +317,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid review id");
+        expect(body.msg).toBe('invalid review id')
       });
   });
   test("404: invalid path", () => {
@@ -323,7 +330,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("path not found");
+        expect(body.msg).toBe('path not found')
       });
   });
   test("400: invalid data type", () => {
@@ -337,6 +344,99 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
+describe("GET /api/reviews for queries", () => {
+  test("200: should be sorted by sort_by query by title", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("title", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by designer", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=designer")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("designer", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by owner", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=owner")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("owner", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by review_img_url", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=review_img_url")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("review_img_url", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by review_body", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=review_body")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("review_body", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by votes", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("votes", {
+          descending: true,
+        });
+      });
+  });
+  test("200: should be sorted by sort_by query by votes which ascends", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("votes");
+      });
+  });
+  test("400: should return error message of 'invalid sort by value", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=oranges")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid sort by value");
+      });
+  });
+  test("400: should return error message of 'invalid order value", () => {
+    return request(app)
+      .get("/api/reviews?order=oranges")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid order value");
       });
   });
 });
