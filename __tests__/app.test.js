@@ -340,3 +340,15 @@ describe("POST /api/reviews/:review_id/comments", () => {
       });
   });
 });
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: should return an empty body", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(() => {
+        return db.query(`SELECT * FROM comments WHERE comment_id = 3`).then(({rows}) => {
+          expect(rows).toEqual([])
+        })
+      });
+  });
+});
