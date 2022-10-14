@@ -369,4 +369,12 @@ describe("DELETE /api/comments/:comment_id", () => {
         expect(body.msg).toBe("invalid data type");
       });
   });
+  test("404: resource not found", () => {
+    return request(app)
+      .delete("/api/comments/99999999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Resource not found");
+      });
+  });
 });
