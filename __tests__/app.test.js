@@ -15,20 +15,7 @@ afterAll(() => db.end());
 
 describe("GET /api/", () => {
   test("200: should return a JSON of all endpoints ", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then(({ body }) => {
-        const { api } = body;
-        });
-      });
-  test("404: responds with a not found message ", () => {
-    return request(app)
-      .get("/api/catgorties")
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("path not found");
-      });
+    return request(app).get("/api").expect(200);
   });
 });
 
@@ -336,7 +323,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('invalid review id')
+        expect(body.msg).toBe("invalid review id");
       });
   });
   test("404: invalid path", () => {
@@ -349,7 +336,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('path not found')
+        expect(body.msg).toBe("path not found");
       });
   });
   test("400: invalid data type", () => {
