@@ -1,8 +1,8 @@
 const {
   fetchCommentsByReviewId,
   addCommentsByReviewId,
+  removeByCommentId,
 } = require("../models/comments.models");
-const { fetchReview } = require("../models/reviews.models");
 
 function getCommentsByReviewId(req, res, next) {
   const reviewId = req.params.review_id;
@@ -16,11 +16,22 @@ function getCommentsByReviewId(req, res, next) {
 function postCommentByReviewId(req, res, next) {
   const { review_id } = req.params;
   const postComment = req.body;
-    addCommentsByReviewId(review_id, postComment)
+  addCommentsByReviewId(review_id, postComment)
     .then((postedComment) => {
       res.status(201).send({ postedComment });
     })
     .catch((err) => next(err));
 }
 
-module.exports = { postCommentByReviewId, getCommentsByReviewId };
+function deleteByCommentId(req, res) {
+  const { comment_id } = req.params;
+  removeByCommentId(comment_id).then((rows) => {
+    res.status(204).send(rows);
+  });
+}
+
+module.exports = {
+  postCommentByReviewId,
+  getCommentsByReviewId,
+  deleteByCommentId,
+};
