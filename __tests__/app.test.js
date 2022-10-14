@@ -13,6 +13,25 @@ beforeEach(() => seed({ categoryData, commentData, reviewData, userData }));
 
 afterAll(() => db.end());
 
+describe("GET /api/", () => {
+  test("200: should return a JSON of all endpoints ", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        const { api } = body;
+        });
+      });
+  test("404: responds with a not found message ", () => {
+    return request(app)
+      .get("/api/catgorties")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found");
+      });
+  });
+});
+
 describe("GET /api/categories", () => {
   test("200: should return a list of categories ", () => {
     return request(app)
