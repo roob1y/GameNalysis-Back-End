@@ -361,4 +361,12 @@ describe("DELETE /api/comments/:comment_id", () => {
           });
       });
   });
+  test("400: invalid data type", () => {
+    return request(app)
+      .delete("/api/comments/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
 });

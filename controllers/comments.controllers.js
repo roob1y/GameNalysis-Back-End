@@ -23,11 +23,12 @@ function postCommentByReviewId(req, res, next) {
     .catch((err) => next(err));
 }
 
-function deleteByCommentId(req, res) {
+function deleteByCommentId(req, res, next) {
   const { comment_id } = req.params;
   removeByCommentId(comment_id).then((rows) => {
     res.status(204).send(rows);
-  });
+  })
+  .catch((err) => next(err));
 }
 
 module.exports = {
