@@ -317,7 +317,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid review id");
+        expect(body.msg).toBe('invalid review id')
       });
   });
   test("404: invalid path", () => {
@@ -330,7 +330,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("path not found");
+        expect(body.msg).toBe('path not found')
       });
   });
   test("400: invalid data type", () => {
@@ -347,7 +347,6 @@ describe("POST /api/reviews/:review_id/comments", () => {
       });
   });
 });
-
 describe("GET /api/reviews for queries", () => {
   test("200: should be sorted by sort_by query by title", () => {
     return request(app)
@@ -438,6 +437,44 @@ describe("GET /api/reviews for queries", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid order value");
+      });
+  });
+});
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: should return an empty body", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("204: should delete comment from SQL table", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(() => {
+        return db
+          .query(`SELECT * FROM comments WHERE comment_id = 3`)
+          .then(({ rows }) => {
+            expect(rows).toEqual([]);
+          });
+      });
+  });
+  test("400: invalid data type", () => {
+    return request(app)
+      .delete("/api/comments/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("404: resource not found", () => {
+    return request(app)
+      .delete("/api/comments/99999999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Resource not found");
       });
   });
 });

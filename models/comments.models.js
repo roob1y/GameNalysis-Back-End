@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkExists } = require("../db/seeds/utils");
 
 function fetchCommentsByReviewId(reviewId) {
   return db
@@ -12,11 +13,11 @@ function fetchCommentsByReviewId(reviewId) {
     )
     .then(({ rows }) => {
       if (rows.length === 0) {
-        return Promise.reject({status: 404, msg: 'review id not found'})
+        return Promise.reject({ status: 404, msg: "review id not found" });
       } else {
         return rows;
       }
-    })
+    });
 }
 
 function addCommentsByReviewId(reviewId, postComment) {
@@ -39,4 +40,20 @@ function addCommentsByReviewId(reviewId, postComment) {
     });
 }
 
-module.exports = { fetchCommentsByReviewId, addCommentsByReviewId };
+function removeByCommentId(commentId) {
+  return checkExists("comments", "comment_id", commentId).then(() => {
+    return db
+      .query(`DELETE FROM comments WHERE comment_id = $1`, [commentId])
+      .then(({ rows }) => {
+        if (rows.length === 0) {
+          return rows;
+        }
+      });
+  });
+}
+
+module.exports = {
+  fetchCommentsByReviewId,
+  addCommentsByReviewId,
+  removeByCommentId,
+};
