@@ -16,7 +16,17 @@
   },
   "GET /api/reviews": {
     "description": "serves an array of all reviews",
-    "queries": ["category", "sort_by", "order"],
+    "queries": [
+      "category",
+      "title",
+      "designer",
+      "owner",
+      "review_img_url",
+      "review_body",
+      "votes",
+      "sort_by",
+      "order"
+    ],
     "exampleResponse": {
       "reviews": [
         {
@@ -29,6 +39,91 @@
           "votes": 5
         }
       ]
+    }
+  },
+  "GET /api/reviews/:review_id": {
+    "description": "serves an array of a review",
+    "queries": ["category", "sort_by", "order"],
+    "exampleResponse": {
+      "reviews": [
+        {
+          "title": "One Night Ultimate Werewolf",
+          "designer": "Akihisa Okui",
+          "owner": "happyamy2016",
+          "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+          "review_body": "We couldn't find the werewolf!",
+          "category": "hidden-roles",
+          "created_at": 1610964101251,
+          "votes": 5,
+          "comment_count": 3
+        }
+      ]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "bainesface",
+          "name": "sarah",
+          "avatar_url": "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4"
+        }
+      ]
+    }
+  },
+  "GET /api/reviews/:review_id/comments": {
+    "description": "serves an array of a comment by review id",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 3,
+          "body": "I didn't know dogs could play games",
+          "votes": 10,
+          "author": "philippaclaire9",
+          "review_id": 3,
+          "created_at": 1610964588110
+        }
+      ]
+    }
+  },
+  "PATCH /api/reviews/:review_id": {
+    "description": "serves an array of a patched review by review id",
+    "queries": [],
+    "send": { "inc_votes": 10 },
+    "exampleResponse": {
+      "comments": [
+        {
+          "title": "Jenga",
+          "designer": "Leslie Scott",
+          "owner": "philippaclaire9",
+          "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          "review_body": "Fiddly fun for all the family",
+          "category": "dexterity",
+          "created_at": "new Date(1610964101251)",
+          "votes": 15
+        }
+      ]
+    }
+  },
+  "POST /api/reviews/:review_id/comments": {
+    "description": "serves an object of a comments body by review id",
+    "queries": [],
+    "send": { "username": "bainesface", "body": "OMG I LOVED THIS AS A CHILD" },
+    "exampleResponse": {
+      "postedComment": {
+        "username": "bainesface",
+        "body": "OMG I LOVED THIS AS A CHILD"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a comment by comment id",
+    "queries": [],
+    "exampleResponse": {
+      "body": {}
     }
   }
 }
