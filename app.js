@@ -1,3 +1,5 @@
+const cors = require('cors');
+
 const apiData = require("./endpoints.json");
 
 const { getCategories } = require("./controllers/categories.controllers");
@@ -15,6 +17,9 @@ const {
 
 const express = require("express");
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 app.get("/api", (req, res) => {
