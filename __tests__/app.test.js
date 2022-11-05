@@ -298,7 +298,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
   });
 });
 
-describe("POST /api/reviews/:review_id/comments", () => {
+describe.only("POST /api/reviews/:review_id/comments", () => {
   test("201: should return an object of the posted comment", () => {
     const postComment = {
       username: "bainesface",
