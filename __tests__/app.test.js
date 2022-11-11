@@ -298,7 +298,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
   });
 });
 
-describe.only("POST /api/reviews/:review_id/comments", () => {
+describe("POST /api/reviews/:review_id/comments", () => {
   test("201: should return an object of the posted comment", () => {
     const postComment = {
       username: "bainesface",
@@ -306,8 +306,8 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
     };
     return request(app)
       .post("/api/reviews/3/comments")
-      .expect(201)
       .send(postComment)
+      .expect(201)
       .then(({ body }) => {
         const { postedComment } = body;
         expect(postedComment.body).toEqual("OMG I LOVED THIS AS A CHILD");
