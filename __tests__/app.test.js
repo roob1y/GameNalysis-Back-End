@@ -323,7 +323,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid review id");
+        expect(body.msg).toBe("Key (review_id)=(9999999) is not present in table \"reviews\".");
       });
   });
   test("404: invalid path", () => {
@@ -337,6 +337,19 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("path not found");
+      });
+  });
+  test("404: invalid username", () => {
+    const postComment = {
+      username: "test",
+      body: "test",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send(postComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Key (author)=(test) is not present in table \"users\".");
       });
   });
   test("400: invalid data type", () => {

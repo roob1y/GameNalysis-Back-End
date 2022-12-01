@@ -32,11 +32,7 @@ function addCommentsByReviewId(reviewId, postComment) {
       [body, username, reviewId]
     )
     .then(({ rows }) => {
-      if (rows.length === 0) {
-        Promise.reject({ status: 404, msg: "review id not found" });
-      } else {
         return rows[0];
-      }
     });
 }
 
