@@ -20,8 +20,8 @@ function fetchCommentsByReviewId(reviewId) {
     });
 }
 
-function addCommentsByReviewId(reviewId, postComment) {
-  const { username, body } = postComment;
+function addCommentsByReviewId(reviewId, commentBody) {
+  const { username, comment } = commentBody;
   return db
     .query(
       `
@@ -29,7 +29,7 @@ function addCommentsByReviewId(reviewId, postComment) {
         VALUES ($1, $2, $3)        
         RETURNING *;
     `,
-      [body, username, reviewId]
+      [comment, username, reviewId]
     )
     .then(({ rows }) => {
       if (rows.length === 0) {
