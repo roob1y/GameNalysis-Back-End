@@ -1,15 +1,42 @@
 # Back End Server For NC-Game-Reviews
-## Link to the Hosted Backend Server
-
-See the hosted version of this backend by following this link --> [Api Server](https://nc-reviews-games.cyclic.app/)
-
 <br>
+
+**Link to the Hosted Backend Server**
+
+>See the hosted version of this backend by following this link --> [Api Server](https://nc-reviews-games.cyclic.app/)
+
 
 ## Background
 
 This project was a challenge given to myself from Northcoders to show the backend skillset I have been taught during my time on the course. The backend will be used as A RESTful API to insert into my front end project. This will be a type of socail media platform where users can add reviews of their chosen board games, share with others and have other users to be able to comment and like/dislike their posts.
 
-<br>
+## Technical Details
+
+This project has be coded to show the backend skillsets in which i have learnt during my time on the software engineering course at Northcoders. During the development process of this backend project, i used **T**est **D**riven **D**evelopment (**TDD**) to make sure that the code works as intended. I tested GET, PATCH, POST and DELETE requests and for errors to improve the server's error handling.
+
+A set of packages/frameworks was used -
+
+Node.js: 
+>Allows data to be fetched asynchronously from a database
+
+Express: 
+>This gives ways of request handling and usage of HTTP methods 
+
+Postgres SQL: 
+>A relational database
+
+Dotenv: 
+>locates local .env files to be use securely in application
+
+Jest:
+>Creates tests to make sure code works as intended 
+
+Supertest: 
+>Adds tests for HTTP requests 
+
+**M**odel **V**iew **C**ontroller (**MVC**) archetecture was used as a means to organise the server by isolating it's components in a more manageable way
+
+----------------------------
 
 ## How To Clone This Project
 
@@ -25,10 +52,7 @@ git clone 'INSERT-URL-HERE'
 
 A copy of this repo will now have downloaded onto your local machine
 
-<br>
-
 #### **`Important for those who have cloned my repository...`**
-
 
 This API server requires that anyone who pulls from this REPO to edit the .env files manually otherwise you will recieve the error...
 <br>
@@ -36,9 +60,8 @@ This API server requires that anyone who pulls from this REPO to edit the .env f
 ```console
 throw new Error('PGDATABASE not set')
 ```
-<br>
 
-#### How To Fix `PGDATABASE not set` Error
+## How To Fix `PGDATABASE not set` Error
 
 For these databases to be found correctly, you must use the template of PGDATABASE=DATABASE_NAME.
 
