@@ -32,7 +32,7 @@ function addCommentsByReviewId(reviewId, postComment) {
       [body, username, reviewId]
     )
     .then(({ rows }) => {
-        return rows[0];
+      return rows[0];
     });
 }
 
@@ -49,17 +49,19 @@ function removeByCommentId(commentId) {
 }
 
 function addVoteByCommentId(commentId, incVotes) {
-  return db.query(
-    `
+  return db
+    .query(
+      `
       UPDATE comments
       SET votes = votes + $2 
       WHERE comment_id = $1 
       RETURNING *
     `,
-    [commentId, incVotes]).then(({rows}) => {
-    return rows[0];
-  })
-
+      [commentId, incVotes]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
 }
 
 module.exports = {

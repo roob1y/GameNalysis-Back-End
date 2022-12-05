@@ -614,9 +614,7 @@ describe("POST /api/reviews", () => {
           review_id: expect.any(Number),
           votes: expect.any(Number),
           created_at: expect.any(String),
-          comment_count: expect.any(Number),
         });
-        // expect(postedReview.body).toEqual("test body");
       });
   });
 });

@@ -2,6 +2,7 @@ const {
   fetchReview,
   patchReview,
   fetchAllReviews,
+  addReview,
 } = require("../models/reviews.models");
 
 function getReview(req, res, next) {
@@ -16,10 +17,11 @@ function getReview(req, res, next) {
 function patchReviewById(req, res, next) {
   const reviewId = req.params.review_id;
   const incVotes = req.body.inc_votes;
-  patchReview(reviewId, incVotes).then((rows) => {
-    res.status(200).send({updatedReview: rows[0]});
-  })
-  .catch((err) => next(err));
+  patchReview(reviewId, incVotes)
+    .then((rows) => {
+      res.status(200).send({ updatedReview: rows[0] });
+    })
+    .catch((err) => next(err));
 }
 
 function getAllReviews(req, res, next) {
@@ -31,4 +33,12 @@ function getAllReviews(req, res, next) {
     .catch((err) => next(err));
 }
 
-module.exports = { getReview, patchReviewById, getAllReviews };
+function postReview(req, res) {
+  const reviewData = req.body;
+  addReview(reviewData).then((rows) => {
+    console.log("rows: ", rows);
+    res.status(201).send({ postedReview: rows });
+  });
+}
+
+module.exports = { getReview, patchReviewById, getAllReviews, postReview };
