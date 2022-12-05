@@ -590,3 +590,33 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 });
+describe("POST /api/reviews", () => {
+  test("201: should return an object of the posted comment", () => {
+    const postReview = {
+      owner: "mallionaire",
+      title: "test title",
+      review_body: "test body",
+      designer: "test designer",
+      category: "dexterity",
+    };
+    return request(app)
+      .post("/api/reviews")
+      .send(postReview)
+      .expect(201)
+      .then(({ body }) => {
+        const { postedReview } = body;
+        expect(postedReview).toMatchObject({
+          owner: "mallionaire",
+          title: "test title",
+          review_body: "test body",
+          designer: "test designer",
+          category: "dexterity",
+          review_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          comment_count: expect.any(Number),
+        });
+        // expect(postedReview.body).toEqual("test body");
+      });
+  });
+});
