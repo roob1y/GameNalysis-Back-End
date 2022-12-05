@@ -575,9 +575,18 @@ describe("PATCH /api/comments/:comment_id", () => {
     return request(app)
       .patch("/api/comments/test")
       .send({ inc_votes: 10 })
-      // .expect(400)
+      .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("404: responds with 'path not found'", () => {
+    return request(app)
+      .patch("/api/commates/1")
+      .send({ inc_votes: 10 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
       });
   });
 });
