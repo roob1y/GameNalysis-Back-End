@@ -715,3 +715,42 @@ describe("POST /api/categories", () => {
       });
   });
 });
+
+describe("DELETE /api/reviews/:review_id", () => {
+  test("204: returns an empty body", () => {
+    return request(app)
+      .delete("/api/reviews/3")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("204: should delete comment from SQL table", () => {
+    return request(app)
+      .delete("/api/reviews/3")
+      .expect(204)
+      .then(() => {
+        return db
+          .query(`SELECT * FROM comments WHERE comment_id = 3`)
+          .then(({ rows }) => {
+            expect(rows).toEqual([]);
+          });
+      });
+  });
+  test("400: invalid data type", () => {
+    return request(app)
+      .delete("/api/reviews/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("404: resource not found", () => {
+    return request(app)
+      .delete("/api/reviews/99999999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Resource not found");
+      });
+  });
+});

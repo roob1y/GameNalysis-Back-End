@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkExists } = require("../db/seeds/utils");
 
 function fetchReview(reviewId) {
   return db
@@ -40,7 +41,12 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-function fetchAllReviews(sortBy = "created_at", order = "desc", limit = 10, p = 1) {
+function fetchAllReviews(
+  sortBy = "created_at",
+  order = "desc",
+  limit = 10,
+  p = 1
+) {
   const validSortByValues = [
     "created_at",
     "category",
@@ -66,7 +72,7 @@ function fetchAllReviews(sortBy = "created_at", order = "desc", limit = 10, p = 
       LEFT JOIN comments ON comments.review_id = reviews.review_id
       GROUP BY reviews.review_id
       ORDER BY ${sortBy} ${order}
-      LIMIT ${limit} OFFSET ${p-1}
+      LIMIT ${limit} OFFSET ${p - 1}
     `
     )
     .then(({ rows }) => {
@@ -93,4 +99,20 @@ function addReview({ owner, title, review_body, designer, category }) {
     });
 }
 
-module.exports = { fetchReview, patchReview, fetchAllReviews, addReview };
+function removeReviewById(reviewId) {
+  return checkExists("reviews", "review_id", reviewId).then(() => {
+    return db
+      .query(`DELETE FROM reviews WHERE review_id = $1`, [reviewId])
+      .then(({ rows }) => {
+        return rows;
+      });
+  });
+}
+
+module.exports = {
+  fetchReview,
+  patchReview,
+  fetchAllReviews,
+  addReview,
+  removeReviewById,
+};

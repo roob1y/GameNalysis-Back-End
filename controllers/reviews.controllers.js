@@ -3,6 +3,7 @@ const {
   patchReview,
   fetchAllReviews,
   addReview,
+  removeReviewById
 } = require("../models/reviews.models");
 
 function getReview(req, res, next) {
@@ -42,4 +43,14 @@ function postReview(req, res, next) {
     .catch((err) => next(err));
 }
 
-module.exports = { getReview, patchReviewById, getAllReviews, postReview };
+function deleteReviewById(req, res, next) {
+  const {review_id} = req.params
+  removeReviewById(review_id).then((rows) => {
+      res.status(204).send(rows);
+    })
+    .catch((err) => next(err));
+}
+
+
+
+module.exports = { getReview, patchReviewById, getAllReviews, postReview, deleteReviewById };

@@ -42,9 +42,7 @@ function removeByCommentId(commentId) {
     return db
       .query(`DELETE FROM comments WHERE comment_id = $1`, [commentId])
       .then(({ rows }) => {
-        if (rows.length === 0) {
-          return rows;
-        }
+        return rows;
       });
   });
 }
