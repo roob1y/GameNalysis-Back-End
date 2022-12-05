@@ -654,3 +654,15 @@ describe("POST /api/reviews", () => {
       });
   });
 });
+
+describe("GET /api/reviews (pagination)", () => {
+  test("200: should return correct data queried via page and limit numbers", () => {
+    return request(app)
+      .get("/api/reviews?p=1&limit=2")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toHaveLength(2);
+      });
+  });
+});

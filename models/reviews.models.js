@@ -40,7 +40,7 @@ function patchReview(reviewId, incVotes) {
     });
 }
 
-function fetchAllReviews(sortBy = "created_at", order = "desc") {
+function fetchAllReviews(sortBy = "created_at", order = "desc", limit = 10, p = 0) {
   const validSortByValues = [
     "created_at",
     "category",
@@ -65,7 +65,8 @@ function fetchAllReviews(sortBy = "created_at", order = "desc") {
       SELECT reviews.*, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
       LEFT JOIN comments ON comments.review_id = reviews.review_id
       GROUP BY reviews.review_id
-      ORDER BY ${sortBy} ${order};
+      ORDER BY ${sortBy} ${order}
+      LIMIT ${limit} OFFSET ${p-1}
     `
     )
     .then(({ rows }) => {
