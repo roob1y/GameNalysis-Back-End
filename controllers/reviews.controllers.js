@@ -25,8 +25,8 @@ function patchReviewById(req, res, next) {
 }
 
 function getAllReviews(req, res, next) {
-  const { sort_by, order } = req.query;
-  fetchAllReviews(sort_by, order)
+  const { sort_by, order, limit, p } = req.query;
+  fetchAllReviews(sort_by, order, limit, p)
     .then((data) => {
       res.status(200).send({ reviews: data });
     })

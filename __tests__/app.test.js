@@ -194,7 +194,6 @@ describe("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews).toHaveLength(13);
         reviews.forEach((review) => {
           expect(review).toMatchObject({
             owner: expect.any(String),
@@ -651,6 +650,18 @@ describe("POST /api/reviews", () => {
         expect(body.msg).toBe(
           "Key (owner)=(testuser) is not present in table \"users\"."
         );
+      });
+  });
+});
+
+describe("GET /api/reviews (pagination)", () => {
+  test("200: should return correct data queried via page and limit numbers", () => {
+    return request(app)
+      .get("/api/reviews?p=1&limit=2")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toHaveLength(2);
       });
   });
 });
