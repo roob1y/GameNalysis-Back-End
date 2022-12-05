@@ -617,4 +617,38 @@ describe("POST /api/reviews", () => {
         });
       });
   });
+  test("404: invalid path", () => {
+    const postReview = {
+      owner: "mallionaire",
+      title: "test title",
+      review_body: "test body",
+      designer: "test designer",
+      category: "dexterity",
+    };
+    return request(app)
+      .post("/api/reviets")
+      .send(postReview)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
+      });
+  });
+  test("404: invalid owner", () => {
+    const postReview = {
+      owner: "testuser",
+      title: "test title",
+      review_body: "test body",
+      designer: "test designer",
+      category: "dexterity",
+    };
+    return request(app)
+      .post("/api/reviews/")
+      .send(postReview)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Key (owner)=(testuser) is not present in table \"users\"."
+        );
+      });
+  });
 });

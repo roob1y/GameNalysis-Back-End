@@ -33,12 +33,13 @@ function getAllReviews(req, res, next) {
     .catch((err) => next(err));
 }
 
-function postReview(req, res) {
+function postReview(req, res, next) {
   const reviewData = req.body;
-  addReview(reviewData).then((rows) => {
-    console.log("rows: ", rows);
-    res.status(201).send({ postedReview: rows });
-  });
+  addReview(reviewData)
+    .then((rows) => {
+      res.status(201).send({ postedReview: rows });
+    })
+    .catch((err) => next(err));
 }
 
 module.exports = { getReview, patchReviewById, getAllReviews, postReview };
