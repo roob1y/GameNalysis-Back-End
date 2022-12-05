@@ -3,7 +3,7 @@
 
 **Link to the Hosted Backend Server**
 
->See the hosted version of this backend by following this link --> [Api Server](https://nc-reviews-games.cyclic.app/)
+>See the hosted version of this backend by following this link --> [Api Server](https://nc-reviews-games.cyclic.app/api)
 
 
 ## Background
