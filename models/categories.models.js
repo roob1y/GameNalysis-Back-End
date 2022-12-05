@@ -6,4 +6,16 @@ function fetchCategories() {
   });
 }
 
-module.exports = { fetchCategories };
+function addCategories(slug, description) {
+  return db.query(
+    `
+    INSERT INTO categories(slug, description)
+    VALUES ($1, $2)
+    RETURNING *
+  `,[slug, description]
+  ).then(({ rows }) => {
+    return rows[0];
+  });
+}
+
+module.exports = { fetchCategories, addCategories };
