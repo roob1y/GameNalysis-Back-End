@@ -665,3 +665,31 @@ describe("GET /api/reviews (pagination)", () => {
       });
   });
 });
+
+describe("GET /api/reviews/:review_id/comments (pagination)", () => {
+  test("200: should return correct data queried via page and limit numbers", () => {
+    return request(app)
+      .get("/api/reviews/3/comments?p=1&limit=2")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toHaveLength(2);
+      });
+  });
+  test("400: bad request - 'p' query", () => {
+    return request(app)
+      .get("/api/reviews/3/comments?p=a&limit=2")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("400: bad request - 'limit' query", () => {
+    return request(app)
+      .get("/api/reviews/3/comments?p=1&limit=B")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
