@@ -518,7 +518,7 @@ describe("GET /api/users/:username", () => {
         });
       });
   });
-  test("404: invalid data type`", () => {
+  test("404: invalid username`", () => {
     return request(app)
       .get("/api/users/123")
       .expect(404)
