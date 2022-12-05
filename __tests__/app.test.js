@@ -313,7 +313,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(postedComment.body).toEqual("OMG I LOVED THIS AS A CHILD");
       });
   });
-  test("404: invalid review id", () => {
+  test("400: invalid review id", () => {
     const postComment = {
       username: "bainesface",
       body: "OMG I LOVED THIS AS A CHILD",
@@ -321,7 +321,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
     return request(app)
       .post("/api/reviews/9999999/comments")
       .send(postComment)
-      .expect(404)
+      .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe(
           'Key (review_id)=(9999999) is not present in table "reviews".'
@@ -341,7 +341,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(body.msg).toBe("path not found");
       });
   });
-  test("404: invalid username", () => {
+  test("400: invalid username", () => {
     const postComment = {
       username: "test",
       body: "test",
@@ -349,7 +349,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
     return request(app)
       .post("/api/reviews/3/comments")
       .send(postComment)
-      .expect(404)
+      .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe(
           'Key (author)=(test) is not present in table "users".'
@@ -536,6 +536,7 @@ describe("GET /api/users/:username", () => {
       });
   });
 });
+
 describe("PATCH /api/comments/:comment_id", () => {
   test("200: should return updated comment with increment votes", () => {
     return request(app)
@@ -590,6 +591,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 });
+
 describe("POST /api/reviews", () => {
   test("201: should return an object of the posted comment", () => {
     const postReview = {
@@ -633,7 +635,7 @@ describe("POST /api/reviews", () => {
         expect(body.msg).toBe("path not found");
       });
   });
-  test("404: invalid owner", () => {
+  test("400: invalid owner", () => {
     const postReview = {
       owner: "testuser",
       title: "test title",
@@ -644,7 +646,7 @@ describe("POST /api/reviews", () => {
     return request(app)
       .post("/api/reviews/")
       .send(postReview)
-      .expect(404)
+      .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe(
           "Key (owner)=(testuser) is not present in table \"users\"."
