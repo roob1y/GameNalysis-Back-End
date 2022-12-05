@@ -1,7 +1,7 @@
 const apiRouter = require('express').Router();
 const categoryRouter = require('./categories-router');
 const reviewRouter = require('./review-router');
-const userRouter = require('./user-router');
+const usersRouter = require('./users-router');
 const commentsRouter = require('./comments-router');
 
 
@@ -13,7 +13,7 @@ apiRouter.get("/", (req, res) => {
 
 apiRouter.use('/categories', categoryRouter);
 apiRouter.use('/reviews', reviewRouter);
-apiRouter.use('/user', userRouter);
+apiRouter.use('/users', usersRouter);
 apiRouter.use('/comments', commentsRouter);
 
 

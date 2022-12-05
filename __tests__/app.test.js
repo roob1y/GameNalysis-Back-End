@@ -8,6 +8,7 @@ const {
   reviewData,
   userData,
 } = require("../db/data/test-data/index");
+const { string } = require("pg-format");
 
 beforeEach(() => seed({ categoryData, commentData, reviewData, userData }));
 
@@ -86,7 +87,7 @@ describe("GET /api/reviews/:review_id", () => {
 describe("GET /api/users", () => {
   test("200: should return an object of users", () => {
     return request(app)
-      .get("/api/user")
+      .get("/api/users")
       .expect(200)
       .then(({ body }) => {
         const { users } = body;
@@ -188,7 +189,7 @@ describe("GET /api/reviews/:review_id (comment count)", () => {
 });
 
 describe("GET /api/reviews", () => {
-  test("200: should return an object of a review with a new property of column_count", () => {
+  test("200: should return an object of a review with new properties owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
@@ -323,7 +324,9 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Key (review_id)=(9999999) is not present in table \"reviews\".");
+        expect(body.msg).toBe(
+          'Key (review_id)=(9999999) is not present in table "reviews".'
+        );
       });
   });
   test("404: invalid path", () => {
@@ -349,7 +352,9 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(postComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Key (author)=(test) is not present in table \"users\".");
+        expect(body.msg).toBe(
+          'Key (author)=(test) is not present in table "users".'
+        );
       });
   });
   test("400: invalid data type", () => {
@@ -494,6 +499,23 @@ describe("DELETE /api/comments/:comment_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Resource not found");
+      });
+  });
+});
+describe.only("GET /api/users/:username", () => {
+  test("200: - should return a user object with properties `username`, `avatar_url`, `name`", () => {
+    return request(app)
+      .get("/api/users/mallionaire")
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        console.log("user: ", user);
+        expect(user).toMatchObject({
+          username: "mallionaire",
+          avatar_url:
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+          name: "haz",
+        });
       });
   });
 });
