@@ -502,7 +502,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 });
-describe.only("GET /api/users/:username", () => {
+describe("GET /api/users/:username", () => {
   test("200: - should return a user object with properties `username`, `avatar_url`, `name`", () => {
     return request(app)
       .get("/api/users/mallionaire")
@@ -516,6 +516,14 @@ describe.only("GET /api/users/:username", () => {
             "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
           name: "haz",
         });
+      });
+  });
+  test("404: invalid data type`", () => {
+    return request(app)
+      .get("/api/users/123")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid username")
       });
   });
 });

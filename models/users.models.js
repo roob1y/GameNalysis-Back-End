@@ -8,7 +8,13 @@ function fetchUsers() {
 
 function fetchUserByUsername(username) {
   return db.query(`SELECT * FROM users WHERE username = '${username}'`).then(({rows}) => {
-    return rows[0];
+    console.log('rows: ', rows.length);
+    
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "invalid username" });
+    } else {
+      return rows[0];
+    }
   })
 }
 
