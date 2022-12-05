@@ -698,7 +698,8 @@ describe("POST /api/categories", () => {
   test("201: should return an object of the posted category", () => {
     const postCategory = {
       slug: "mystery",
-      description: "is that... a board game? That is no mystery, but is the game good? Now that is for you to decide!",
+      description:
+        "is that... a board game? That is no mystery, but is the game good? Now that is for you to decide!",
     };
     return request(app)
       .post("/api/categories")
@@ -708,7 +709,8 @@ describe("POST /api/categories", () => {
         const { postedCategory } = body;
         expect(postedCategory).toMatchObject({
           slug: "mystery",
-          description: "is that... a board game? That is no mystery, but is the game good? Now that is for you to decide!",
+          description:
+            "is that... a board game? That is no mystery, but is the game good? Now that is for you to decide!",
         });
       });
   });
