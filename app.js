@@ -1,20 +1,5 @@
 const cors = require('cors');
 
-const apiData = require("./endpoints.json");
-
-const { getCategories } = require("./controllers/categories.controllers");
-const {
-  getAllReviews,
-  getReview,
-  patchReviewById,
-} = require("./controllers/reviews.controllers");
-const { getUsers } = require("./controllers/users.controllers");
-const {
-  getCommentsByReviewId,
-  postCommentByReviewId,
-  deleteByCommentId,
-} = require("./controllers/comments.controllers");
-
 const express = require("express");
 const app = express();
 
@@ -22,21 +7,9 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get("/api", (req, res) => {
-  res.status(200).send( apiData );
-});
+const apiRouter = require('./routes/api-router');
 
-app.get("/api/categories", getCategories);
-app.get("/api/reviews/:review_id", getReview);
-app.get("/api/user", getUsers);
-app.get("/api/reviews/", getAllReviews);
-app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
-
-app.patch("/api/reviews/:review_id", patchReviewById);
-
-app.post("/api/reviews/:review_id/comments", postCommentByReviewId);
-
-app.delete("/api/comments/:comment_id", deleteByCommentId);
+app.use('/api', apiRouter);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "path not found" });
