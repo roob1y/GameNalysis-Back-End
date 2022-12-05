@@ -524,7 +524,7 @@ describe("GET /api/users/:username", () => {
       .get("/api/users/usernotfound")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid username")
+        expect(body.msg).toBe("invalid username");
       });
   });
   test("404: mispelled users`", () => {
@@ -532,7 +532,61 @@ describe("GET /api/users/:username", () => {
       .get("/api/uses/mallionaire")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("path not found")
+        expect(body.msg).toBe("path not found");
+      });
+  });
+});
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: should return updated comment with increment votes", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then(({ body }) => {
+        const { updatedComment } = body;
+        expect(updatedComment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          review_id: expect.any(Number),
+          author: expect.any(String),
+          votes: 26,
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("200: should return updated comment with decrement votes", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: -10 })
+      .expect(200)
+      .then(({ body }) => {
+        const { updatedComment } = body;
+        expect(updatedComment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          review_id: expect.any(Number),
+          author: expect.any(String),
+          votes: 6,
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("400: responds with 'invalid data type'", () => {
+    return request(app)
+      .patch("/api/comments/test")
+      .send({ inc_votes: 10 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid data type");
+      });
+  });
+  test("404: responds with 'path not found'", () => {
+    return request(app)
+      .patch("/api/commates/1")
+      .send({ inc_votes: 10 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found");
       });
   });
 });

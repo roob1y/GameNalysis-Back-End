@@ -2,6 +2,7 @@ const {
   fetchCommentsByReviewId,
   addCommentsByReviewId,
   removeByCommentId,
+  addVoteByCommentId,
 } = require("../models/comments.models");
 
 function getCommentsByReviewId(req, res, next) {
@@ -31,8 +32,18 @@ function deleteByCommentId(req, res, next) {
   .catch((err) => next(err));
 }
 
+function postVoteByCommentId(req, res, next) {
+  const {inc_votes} = req.body
+  const {comment_id} = req.params;
+  addVoteByCommentId(comment_id, inc_votes).then((rows) => {
+    res.status(200).send({updatedComment: rows})
+  })
+  .catch((err) => next(err));
+}
+
 module.exports = {
   postCommentByReviewId,
   getCommentsByReviewId,
   deleteByCommentId,
+  postVoteByCommentId,
 };
