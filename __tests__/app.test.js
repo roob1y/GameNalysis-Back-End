@@ -536,3 +536,25 @@ describe("GET /api/users/:username", () => {
       });
   });
 });
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: should return updated comment ", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then(({ body }) => {
+        const { updatedComment } = body;
+        expect(updatedComment).toMatchObject({
+          votes: 15,
+          review_id: expect.any(Number),
+          title: expect.any(String),
+          review_body: expect.any(String),
+          designer: expect.any(String),
+          review_img_url: expect.any(String),
+          category: expect.any(String),
+          owner: expect.any(String),
+          created_at: expect.any(String),
+        });
+      });
+  });
+});
