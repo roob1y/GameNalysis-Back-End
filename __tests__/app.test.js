@@ -648,7 +648,7 @@ describe("POST /api/reviews", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe(
-          "Key (owner)=(testuser) is not present in table \"users\"."
+          'Key (owner)=(testuser) is not present in table "users".'
         );
       });
   });
@@ -680,7 +680,7 @@ describe("GET /api/reviews/:review_id/comments (pagination)", () => {
     return request(app)
       .get("/api/reviews/3/comments?p=a&limit=2")
       .expect(400)
-      .then(({body}) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
       });
   });
@@ -688,8 +688,30 @@ describe("GET /api/reviews/:review_id/comments (pagination)", () => {
     return request(app)
       .get("/api/reviews/3/comments?p=1&limit=B")
       .expect(400)
-      .then(({body}) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("invalid data type");
+      });
+  });
+});
+
+describe("POST /api/categories", () => {
+  test("201: should return an object of the posted category", () => {
+    const postCategory = {
+      slug: "mystery",
+      description:
+        "is that... a board game? That is no mystery, but is the game good? Now that is for you to decide!",
+    };
+    return request(app)
+      .post("/api/categories")
+      .send(postCategory)
+      .expect(201)
+      .then(({ body }) => {
+        const { postedCategory } = body;
+        expect(postedCategory).toMatchObject({
+          slug: "mystery",
+          description:
+            "is that... a board game? That is no mystery, but is the game good? Now that is for you to decide!",
+        });
       });
   });
 });
