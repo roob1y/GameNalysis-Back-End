@@ -8,7 +8,6 @@ const {
   reviewData,
   userData,
 } = require("../db/data/test-data/index");
-const { string } = require("pg-format");
 
 beforeEach(() => seed({ categoryData, commentData, reviewData, userData }));
 
@@ -371,6 +370,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       });
   });
 });
+
 describe("GET /api/reviews for queries", () => {
   test("200: should be sorted by sort_by query by title", () => {
     return request(app)
@@ -464,6 +464,7 @@ describe("GET /api/reviews for queries", () => {
       });
   });
 });
+
 describe("DELETE /api/comments/:comment_id", () => {
   test("204: should return an empty body", () => {
     return request(app)
@@ -502,6 +503,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 });
+
 describe("GET /api/users/:username", () => {
   test("200: - should return a user object with properties `username`, `avatar_url`, `name`", () => {
     return request(app)
@@ -509,7 +511,6 @@ describe("GET /api/users/:username", () => {
       .expect(200)
       .then(({ body }) => {
         const { user } = body;
-        console.log("user: ", user);
         expect(user).toMatchObject({
           username: "mallionaire",
           avatar_url:
