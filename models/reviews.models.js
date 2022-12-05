@@ -51,11 +51,7 @@ function fetchAllReviews(sortBy = "created_at", order = "desc") {
     "review_body",
     "votes",
   ];
-  const validOrderValues = [
-    "asc",
-    "desc"
-  ];
-  
+  const validOrderValues = ["asc", "desc"];
 
   if (!validSortByValues.includes(sortBy)) {
     return Promise.reject({ status: 400, msg: "invalid sort by value" });
@@ -81,4 +77,19 @@ function fetchAllReviews(sortBy = "created_at", order = "desc") {
     });
 }
 
-module.exports = { fetchReview, patchReview, fetchAllReviews };
+function addReview({ owner, title, review_body, designer, category }) {
+  return db
+    .query(
+      `
+    INSERT INTO reviews (owner, title, review_body, designer, category)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *
+    `,
+      [owner, title, review_body, designer, category]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+}
+
+module.exports = { fetchReview, patchReview, fetchAllReviews, addReview };
