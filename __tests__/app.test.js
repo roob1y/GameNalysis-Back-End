@@ -520,10 +520,18 @@ describe("GET /api/users/:username", () => {
   });
   test("404: invalid username`", () => {
     return request(app)
-      .get("/api/users/123")
+      .get("/api/users/usernotfound")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("invalid username")
+      });
+  });
+  test("404: mispelled users`", () => {
+    return request(app)
+      .get("/api/uses/mallionaire")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("path not found")
       });
   });
 });
