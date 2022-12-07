@@ -17,6 +17,7 @@
   "GET /api/reviews": {
     "description": "serves an array of all reviews",
     "queries": [
+      "created_at",
       "category",
       "title",
       "designer",

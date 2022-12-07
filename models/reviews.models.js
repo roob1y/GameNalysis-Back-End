@@ -56,6 +56,7 @@ function fetchAllReviews(
     "review_img_url",
     "review_body",
     "votes",
+    "comment_count"
   ];
   const validOrderValues = ["asc", "desc"];
 

@@ -446,6 +446,17 @@ describe("GET /api/reviews for queries", () => {
         expect(reviews).toBeSortedBy("votes");
       });
   });
+  test.only("200: should be sorted by sort_by query by comment_count", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=comment_count")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("comment_count", {
+          descending: true,
+        });
+      });
+  });
   test("400: should return error message of 'invalid sort by value", () => {
     return request(app)
       .get("/api/reviews?sort_by=oranges")
