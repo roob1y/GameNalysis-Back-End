@@ -45,18 +45,18 @@ function fetchAllReviews(
   sortBy = "created_at",
   order = "desc",
   limit = 10,
-  p = 1
+  p = 1,
+  category
 ) {
   const validSortByValues = [
     "created_at",
-    "category",
     "title",
     "designer",
     "owner",
     "review_img_url",
     "review_body",
     "votes",
-    "comment_count"
+    "comment_count",
   ];
   const validOrderValues = ["asc", "desc"];
 
@@ -66,23 +66,29 @@ function fetchAllReviews(
   if (!validOrderValues.includes(order)) {
     return Promise.reject({ status: 400, msg: "invalid order value" });
   }
-  return db
-    .query(
-      `
-      SELECT reviews.*, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
-      LEFT JOIN comments ON comments.review_id = reviews.review_id
-      GROUP BY reviews.review_id
-      ORDER BY ${sortBy} ${order}
-      LIMIT ${limit} OFFSET ${p - 1}
-    `
-    )
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        Promise.reject({ status: 400, msg: "invalid sort by value" });
-      } else {
-        return rows;
-      }
-    });
+  let baseQuery = `
+  SELECT reviews.*, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+`;
+
+  const paramsArr = [];
+
+  if (category) {
+    baseQuery += `WHERE category = $1`;
+    paramsArr.push(category);
+  }
+
+  baseQuery += `GROUP BY reviews.review_id
+  ORDER BY ${sortBy} ${order}
+  LIMIT ${limit} OFFSET ${p - 1}`
+
+  return db.query(baseQuery, paramsArr).then(({ rows }) => {
+    if (rows.length === 0) {
+      Promise.reject({ status: 400, msg: "invalid sort by value" });
+    } else {
+      return rows;
+    }
+  });
 }
 
 function addReview({ owner, title, review_body, designer, category }) {

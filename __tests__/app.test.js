@@ -220,15 +220,15 @@ describe("GET /api/reviews", () => {
         });
       });
   });
-  test("200: should be able to filter reviews by category", () => {
+  test.only("200: should be able to filter reviews by category", () => {
     return request(app)
-      .get("/api/reviews?sort_by=category")
+      .get("/api/reviews?category=dexterity")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews).toBeSortedBy("category", {
-          descending: true,
-        });
+        reviews.forEach(review => {
+          expect(review.category).toBe("dexterity");
+        })
       });
   });
   test("400: should return message invalid order value", () => {
@@ -446,7 +446,7 @@ describe("GET /api/reviews for queries", () => {
         expect(reviews).toBeSortedBy("votes");
       });
   });
-  test.only("200: should be sorted by sort_by query by comment_count", () => {
+  test("200: should be sorted by sort_by query by comment_count", () => {
     return request(app)
       .get("/api/reviews?sort_by=comment_count")
       .expect(200)
