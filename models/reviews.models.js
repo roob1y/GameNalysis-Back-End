@@ -60,6 +60,9 @@ function fetchAllReviews(
   ];
   const validOrderValues = ["asc", "desc"];
 
+  const offsetVal = (limit * p) - limit;
+
+
   if (!validSortByValues.includes(sortBy)) {
     return Promise.reject({ status: 400, msg: "invalid sort by value" });
   }
@@ -80,7 +83,9 @@ function fetchAllReviews(
 
   baseQuery += `GROUP BY reviews.review_id
   ORDER BY ${sortBy} ${order}
-  LIMIT ${limit} OFFSET ${p - 1}`
+  LIMIT ${limit} OFFSET ${offsetVal}`
+
+
 
   return db.query(baseQuery, paramsArr).then(({ rows }) => {
     if (rows.length === 0) {

@@ -666,25 +666,24 @@ describe("POST /api/reviews", () => {
 });
 
 describe("GET /api/reviews (pagination)", () => {
-  test("200: should return correct data queried via page and limit numbers", () => {
+  test.only("200: should return correct data queried via page and limit numbers", () => {
     return request(app)
-      .get("/api/reviews?p=1&limit=2")
+      .get("/api/reviews?p=2&limit=3")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews).toHaveLength(2);
+        expect(reviews).toHaveLength(3);
       });
   });
 });
 
 describe("GET /api/reviews/:review_id/comments (pagination)", () => {
-  test.only("200: should return correct data queried via page and limit numbers", () => {
+  test("200: should return correct data queried via page and limit numbers", () => {
     return request(app)
       .get("/api/reviews/3/comments?p=2&limit=2")
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
-        console.log('comments: ', comments);
         expect(comments).toHaveLength(1);
       });
   });
