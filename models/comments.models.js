@@ -2,15 +2,16 @@ const db = require("../db/connection");
 const { checkExists } = require("../db/seeds/utils");
 
 function fetchCommentsByReviewId(reviewId, limit = 10, p = 1) {
+  const offsetVal = (limit * p) - limit;
   return db
     .query(
       `
     SELECT * FROM comments
     WHERE review_id = $1
-    ORDER BY created_at DESC
+    ORDER BY comment_id ASC
     LIMIT $2 OFFSET $3
     `,
-      [reviewId, limit, p - 1]
+      [reviewId, limit, offsetVal]
     )
     .then(({ rows }) => {
       if (rows.length === 0) {

@@ -220,7 +220,7 @@ describe("GET /api/reviews", () => {
         });
       });
   });
-  test.only("200: should be able to filter reviews by category", () => {
+  test("200: should be able to filter reviews by category", () => {
     return request(app)
       .get("/api/reviews?category=dexterity")
       .expect(200)
@@ -678,13 +678,14 @@ describe("GET /api/reviews (pagination)", () => {
 });
 
 describe("GET /api/reviews/:review_id/comments (pagination)", () => {
-  test("200: should return correct data queried via page and limit numbers", () => {
+  test.only("200: should return correct data queried via page and limit numbers", () => {
     return request(app)
-      .get("/api/reviews/3/comments?p=1&limit=2")
+      .get("/api/reviews/3/comments?p=2&limit=2")
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
-        expect(comments).toHaveLength(2);
+        console.log('comments: ', comments);
+        expect(comments).toHaveLength(1);
       });
   });
   test("400: bad request - 'p' query", () => {
