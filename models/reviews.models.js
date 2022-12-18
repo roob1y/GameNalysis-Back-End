@@ -86,10 +86,6 @@ function fetchAllReviews(
   baseQuery += `GROUP BY reviews.review_id
   ORDER BY ${sortBy} ${order}
   LIMIT ${limit} OFFSET ${offsetVal}`
-  
-  
-  console.log('baseQuery: ', baseQuery);
-
 
   return db.query(baseQuery, paramsArr).then(({ rows }) => {
     if (rows.length === 0) {
