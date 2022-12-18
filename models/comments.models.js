@@ -8,7 +8,7 @@ function fetchCommentsByReviewId(reviewId, limit = 10, p = 1) {
       `
     SELECT * FROM comments
     WHERE review_id = $1
-    ORDER BY comment_id ASC
+    ORDER BY comment_id DESC
     LIMIT $2 OFFSET $3
     `,
       [reviewId, limit, offsetVal]

@@ -276,6 +276,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
+        console.log('body: ', body);
         expect(comments).toBeSortedBy("created_at", { descending: true });
       });
   });
@@ -666,7 +667,7 @@ describe("POST /api/reviews", () => {
 });
 
 describe("GET /api/reviews (pagination)", () => {
-  test.only("200: should return correct data queried via page and limit numbers", () => {
+  test("200: should return correct data queried via page and limit numbers", () => {
     return request(app)
       .get("/api/reviews?p=2&limit=3")
       .expect(200)
@@ -765,3 +766,4 @@ describe("DELETE /api/reviews/:review_id", () => {
       });
   });
 });
+
