@@ -69,22 +69,26 @@ function fetchAllReviews(
   if (!validOrderValues.includes(order)) {
     return Promise.reject({ status: 400, msg: "invalid order value" });
   }
-  let baseQuery = `
-  SELECT reviews.*, COUNT(comments.review_id) ::INT AS comment_count FROM reviews
+  let baseQuery = `  
+  SELECT reviews.*, COUNT(comments.review_id) ::INT AS comment_count,
+  COUNT(*) OVER() AS review_count
+  FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
-`;
-
+  `;
+  
   const paramsArr = [];
-
+  
   if (category) {
-    baseQuery += `WHERE category = $1`;
     paramsArr.push(category);
+    baseQuery += `WHERE category = $1`;
   }
-
+  
   baseQuery += `GROUP BY reviews.review_id
   ORDER BY ${sortBy} ${order}
   LIMIT ${limit} OFFSET ${offsetVal}`
-
+  
+  
+  console.log('baseQuery: ', baseQuery);
 
 
   return db.query(baseQuery, paramsArr).then(({ rows }) => {

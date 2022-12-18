@@ -671,6 +671,7 @@ describe("GET /api/reviews (pagination)", () => {
       .get("/api/reviews?p=2&limit=3")
       .expect(200)
       .then(({ body }) => {
+        console.log('body: ', body);
         const { reviews } = body;
         expect(reviews).toHaveLength(3);
       });
@@ -765,3 +766,4 @@ describe("DELETE /api/reviews/:review_id", () => {
       });
   });
 });
+
